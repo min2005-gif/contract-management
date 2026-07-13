@@ -32,4 +32,15 @@ public final class ApiExceptions {
       super(message);
     }
   }
+
+  /** 502 - an internal integration (signature, e-document, accounting) is unavailable. */
+  public static class IntegrationUnavailableException extends RuntimeException {
+    public IntegrationUnavailableException(String message) {
+      super(message);
+    }
+
+    public IntegrationUnavailableException(String message, Throwable cause) {
+      super(message, cause);
+    }
+  }
 }

@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import vn.vatm.contract.config.ApiExceptions.BadRequestException;
 import vn.vatm.contract.config.ApiExceptions.ConflictException;
 import vn.vatm.contract.config.ApiExceptions.ForbiddenException;
+import vn.vatm.contract.config.ApiExceptions.IntegrationUnavailableException;
 import vn.vatm.contract.config.ApiExceptions.NotFoundException;
 
 /**
@@ -72,6 +73,11 @@ public class ProblemHandler {
             .map(f -> f.getField() + ": " + f.getDefaultMessage())
             .toList());
     return pd;
+  }
+
+  @ExceptionHandler(IntegrationUnavailableException.class)
+  public ProblemDetail integrationUnavailable(IntegrationUnavailableException ex) {
+    return problem(HttpStatus.BAD_GATEWAY, "INTEGRATION_UNAVAILABLE", ex.getMessage());
   }
 
   @ExceptionHandler(MaxUploadSizeExceededException.class)

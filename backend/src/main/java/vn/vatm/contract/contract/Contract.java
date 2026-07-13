@@ -74,6 +74,9 @@ public class Contract {
   @Column(nullable = false)
   private boolean signed = false;
 
+  @Column(name = "signed_document_ref")
+  private String signedDocumentRef;
+
   @Enumerated(EnumType.STRING)
   @Column(name = "payment_status", nullable = false)
   private PaymentStatus paymentStatus = PaymentStatus.UNPAID;
@@ -212,6 +215,14 @@ public class Contract {
 
   public void setSigned(boolean signed) {
     this.signed = signed;
+  }
+
+  public String getSignedDocumentRef() {
+    return signedDocumentRef;
+  }
+
+  public void setSignedDocumentRef(String signedDocumentRef) {
+    this.signedDocumentRef = signedDocumentRef;
   }
 
   public PaymentStatus getPaymentStatus() {

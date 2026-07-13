@@ -210,16 +210,16 @@ integration returns 502 with no partial state; accounting reconcile returns a re
 
 ### Tests for User Story 5 ⚠️ (write first, must fail)
 
-- [ ] T072 [P] [US5] Digital-signature adapter tests — success records status; failure → 502, no partial state in `backend/src/test/java/vn/vatm/contract/integration/SignatureIntegrationTest.java`
-- [ ] T073 [P] [US5] Accounting-reconcile test + guard that no external portal/national-DB calls occur (FR-022) in `backend/src/test/java/vn/vatm/contract/integration/AccountingIntegrationTest.java`
+- [X] T072 [P] [US5] Digital-signature adapter tests — success records status; failure → 502, no partial state in `backend/src/test/java/vn/vatm/contract/integration/SignatureIntegrationTest.java`
+- [X] T073 [P] [US5] Accounting-reconcile test + guard that no external portal/national-DB calls occur (FR-022) in `backend/src/test/java/vn/vatm/contract/integration/AccountingIntegrationTest.java`
 - [ ] T074 [P] [US5] Web test — sign / reconcile actions on the contract detail page in `frontend/tests/integrations.spec.ts`
 
 ### Implementation for User Story 5
 
-- [ ] T075 [P] [US5] Define integration adapter interfaces + configuration in `backend/src/main/java/vn/vatm/contract/integration/adapters/`
-- [ ] T076 [US5] Implement the digital-signature adapter + `POST /integrations/contracts/{id}/sign` in `backend/src/main/java/vn/vatm/contract/integration/SignatureController.java`
-- [ ] T077 [P] [US5] Implement e-document linking (reference/link a related document) in `backend/src/main/java/vn/vatm/contract/integration/EDocumentService.java`
-- [ ] T078 [US5] Implement the accounting adapter + `POST /integrations/contracts/{id}/accounting/reconcile` in `backend/src/main/java/vn/vatm/contract/integration/AccountingController.java`
+- [X] T075 [P] [US5] Define integration adapter interfaces + configuration in `backend/src/main/java/vn/vatm/contract/integration/adapters/`
+- [X] T076 [US5] Implement the digital-signature adapter + `POST /integrations/contracts/{id}/sign` in `backend/src/main/java/vn/vatm/contract/integration/SignatureController.java`
+- [X] T077 [P] [US5] Implement e-document linking (reference/link a related document) in `backend/src/main/java/vn/vatm/contract/integration/EDocumentService.java`
+- [X] T078 [US5] Implement the accounting adapter + `POST /integrations/contracts/{id}/accounting/reconcile` in `backend/src/main/java/vn/vatm/contract/integration/AccountingController.java`
 - [ ] T079 [P] [US5] Web: sign / reconcile actions on the contract detail page in `frontend/src/features/contracts/IntegrationActions.tsx`
 
 **Checkpoint**: All user stories complete and independently functional.
