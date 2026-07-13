@@ -1,0 +1,77 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.4'
+    id 'io.spring.dependency-management' version '1.1.6'
+    id 'com.diffplug.spotless' version '6.25.0'
+}
+
+group = 'vn.vatm'
+version = '0.1.0'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Web + validation
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // Persistence
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-database-postgresql'
+    runtimeOnly 'org.postgresql:postgresql'
+
+    // Security (OAuth2 resource server: federate to VATM SSO/AD via JWT)
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+
+    // Object storage for attachments (MinIO / S3-compatible)
+    implementation 'io.minio:minio:8.5.12'
+
+    // API docs generated from the OpenAPI contract
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+
+    // Actuator (health probe used by quickstart)
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // Tests
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcontainers:postgresql'
+}
+
+test {
+    useJUnitPlatform()
+    // Testcontainers + OrbStack: point at the OrbStack socket and disable the Ryuk reaper,
+    // which does not run reliably under OrbStack. Overridable from the environment.
+    environment 'DOCKER_HOST',
+            System.getenv().getOrDefault('DOCKER_HOST',
+                    'unix://' + System.getProperty('user.home') + '/.orbstack/run/docker.sock')
+    environment 'TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE', '/var/run/docker.sock'
+    environment 'TESTCONTAINERS_RYUK_DISABLED', 'true'
+    // OrbStack's engine requires Docker API >= 1.40; pin it so the bundled client negotiates up.
+    // docker-java reads the `api.version` system property; the env var is set for good measure.
+    environment 'DOCKER_API_VERSION', System.getenv().getOrDefault('DOCKER_API_VERSION', '1.44')
+    systemProperty 'api.version', '1.44'
+}
+
+// T006: formatting/linting gate
+spotless {
+    java {
+        googleJavaFormat('1.22.0')
+        target 'src/**/*.java'
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+}

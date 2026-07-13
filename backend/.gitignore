@@ -1,0 +1,19 @@
+# Gradle / Java build output
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS / misc
+.DS_Store
+*.log
+*.tmp
+*.swp
+
+# Local env
+.env
+.env.*

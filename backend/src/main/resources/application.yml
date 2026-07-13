@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: contract-backend
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/contract}
+    username: ${DB_USERNAME:contract}
+    password: ${DB_PASSWORD:contract}
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+  flyway:
+    enabled: true
+  servlet:
+    multipart:
+      max-file-size: 60MB
+      max-request-size: 64MB
+
+app:
+  # Local/dev symmetric JWT secret. Production federates to VATM SSO/AD via issuer-uri/JWKS.
+  jwt:
+    secret: ${APP_JWT_SECRET:dev-secret-change-me-please-with-a-long-random-value-0001}
+  attachment:
+    max-size-bytes: ${APP_ATTACHMENT_MAX_SIZE:52428800} # 50 MB (FR-010)
+  storage:
+    minio:
+      endpoint: ${MINIO_ENDPOINT:http://localhost:9000}
+      access-key: ${MINIO_ACCESS_KEY:minioadmin}
+      secret-key: ${MINIO_SECRET_KEY:minioadmin}
+      bucket: ${MINIO_BUCKET:contracts}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+server:
+  port: 8080

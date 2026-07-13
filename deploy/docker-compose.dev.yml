@@ -1,0 +1,50 @@
+# Local development infrastructure for the VATM Contract Management backend (T005).
+# Start with: docker compose -f deploy/docker-compose.dev.yml up -d
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: contract
+      POSTGRES_USER: contract
+      POSTGRES_PASSWORD: contract
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U contract"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "9000:9000"   # S3 API
+      - "9001:9001"   # web console
+    volumes:
+      - miniodata:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # Dev identity provider standing in for VATM's SSO/AD (OIDC). Not required for the
+  # backend test suite (which mints local HS256 tokens), but useful for end-to-end runs.
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0
+    command: ["start-dev"]
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8081:8080"
+
+volumes:
+  pgdata:
+  miniodata:

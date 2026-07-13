@@ -1,0 +1,31 @@
+# --- Java / Gradle (backend) ---
+backend/.gradle/
+backend/build/
+.gradle/
+build/
+
+# --- Node / web (frontend, when added) ---
+node_modules/
+dist/
+coverage/
+
+# --- Flutter / mobile (when added) ---
+mobile/.dart_tool/
+mobile/build/
+
+# --- IDE ---
+.idea/
+*.iml
+.vscode/
+
+# --- OS / misc ---
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.swp
+
+# --- Local environment / secrets ---
+.env
+.env.*
+!.env.example

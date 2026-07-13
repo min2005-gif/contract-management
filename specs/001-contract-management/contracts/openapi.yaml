@@ -1,0 +1,476 @@
+openapi: 3.0.3
+info:
+  title: VATM Contract Management API
+  version: 1.0.0
+  description: >
+    REST API for the centralized contract management system (TCT + 10 subordinate units).
+    Single source of truth for the web and mobile clients. Authorization is enforced per role
+    and owning unit; subordinate-unit callers are scoped to their own unit.
+servers:
+  - url: /api/v1
+security:
+  - bearerAuth: []
+tags:
+  - name: Units & Users
+  - name: Contracts
+  - name: Attachments
+  - name: Workflow
+  - name: Alerts
+  - name: Reports
+  - name: Integrations
+  - name: Audit
+
+paths:
+  /health:
+    get:
+      tags: [Units & Users]
+      security: []
+      summary: Liveness probe
+      responses:
+        '200': { description: OK }
+
+  /units:
+    get:
+      tags: [Units & Users]
+      summary: List organizational units (TCT + subordinates)
+      responses:
+        '200':
+          description: Units
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/OrganizationalUnit' }
+
+  /users:
+    get:
+      tags: [Units & Users]
+      summary: List users (admin; scoped to unit for unit heads)
+      parameters:
+        - { name: unitId, in: query, schema: { type: string, format: uuid } }
+      responses:
+        '200':
+          description: Users
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/User' }
+  /users/{userId}/roles:
+    put:
+      tags: [Units & Users]
+      summary: Assign roles to a user (admin)
+      parameters:
+        - { name: userId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items: { $ref: '#/components/schemas/RoleAssignment' }
+      responses:
+        '200': { description: Updated }
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+  /contracts:
+    get:
+      tags: [Contracts]
+      summary: List/search contracts (scoped by caller's unit unless TCT/management)
+      parameters:
+        - { name: unitId, in: query, schema: { type: string, format: uuid }, description: TCT-only cross-unit filter }
+        - { name: status, in: query, schema: { $ref: '#/components/schemas/ContractStatus' } }
+        - { name: type, in: query, schema: { $ref: '#/components/schemas/ContractType' } }
+        - { name: q, in: query, schema: { type: string }, description: Free-text (number/name/party) }
+        - { name: page, in: query, schema: { type: integer, default: 0 } }
+        - { name: size, in: query, schema: { type: integer, default: 20 } }
+      responses:
+        '200':
+          description: Page of contracts
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ContractPage' }
+    post:
+      tags: [Contracts]
+      summary: Create a contract (DATA_ENTRY) in the caller's unit, as DRAFT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ContractInput' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Contract' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+  /contracts/{id}:
+    get:
+      tags: [Contracts]
+      summary: Get a contract (must be caller's unit or TCT)
+      parameters: [ { $ref: '#/components/parameters/ContractId' } ]
+      responses:
+        '200':
+          description: Contract
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Contract' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [Contracts]
+      summary: Update a contract (owning unit while editable; TCT any time)
+      parameters: [ { $ref: '#/components/parameters/ContractId' } ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ContractInput' }
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Contract' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+  /contracts/{id}/attachments:
+    get:
+      tags: [Attachments]
+      summary: List attachments for a contract
+      parameters: [ { $ref: '#/components/parameters/ContractId' } ]
+      responses:
+        '200':
+          description: Attachments
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Attachment' }
+    post:
+      tags: [Attachments]
+      summary: Upload an attachment (PDF/Word/scan/appendix; type & size validated)
+      parameters: [ { $ref: '#/components/parameters/ContractId' } ]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file: { type: string, format: binary }
+                kind: { type: string, enum: [MAIN, SCAN, APPENDIX, OTHER] }
+      responses:
+        '201':
+          description: Uploaded
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Attachment' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+  /contracts/{id}/attachments/{attachmentId}:
+    get:
+      tags: [Attachments]
+      summary: Download an attachment
+      parameters:
+        - { $ref: '#/components/parameters/ContractId' }
+        - { name: attachmentId, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        '200':
+          description: File stream
+          content:
+            application/octet-stream:
+              schema: { type: string, format: binary }
+    delete:
+      tags: [Attachments]
+      summary: Delete an attachment (owning unit while editable)
+      parameters:
+        - { $ref: '#/components/parameters/ContractId' }
+        - { name: attachmentId, in: path, required: true, schema: { type: string, format: uuid } }
+      responses:
+        '204': { description: Deleted }
+
+  /contracts/{id}/workflow:
+    post:
+      tags: [Workflow]
+      summary: Perform a workflow action (submit / check-approve / tct-approve / reject / liquidate)
+      description: >
+        Enforces the state machine and role rules. REJECT requires a reason and returns the
+        contract to DRAFT. Official contracts require TCT approval before ACTIVE.
+      parameters: [ { $ref: '#/components/parameters/ContractId' } ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/WorkflowActionInput' }
+      responses:
+        '200':
+          description: New contract state
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Contract' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '409':
+          description: Illegal state transition
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+
+  /alerts:
+    get:
+      tags: [Alerts]
+      summary: List alerts (scoped to caller; person-in-charge sees their own)
+      parameters:
+        - { name: type, in: query, schema: { $ref: '#/components/schemas/AlertType' } }
+        - { name: status, in: query, schema: { type: string, enum: [OPEN, ACKNOWLEDGED, RESOLVED] } }
+      responses:
+        '200':
+          description: Alerts
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Alert' }
+  /alerts/{alertId}:
+    patch:
+      tags: [Alerts]
+      summary: Acknowledge or resolve an alert
+      parameters:
+        - { name: alertId, in: path, required: true, schema: { type: string, format: uuid } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status: { type: string, enum: [ACKNOWLEDGED, RESOLVED] }
+      responses:
+        '200': { description: Updated }
+
+  /reports/summary:
+    get:
+      tags: [Reports]
+      summary: Consolidated summary (TCT/management) — totals + per-unit breakdown
+      responses:
+        '200':
+          description: Report data (drives dashboard charts)
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ReportSummary' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /reports/export:
+    get:
+      tags: [Reports]
+      summary: Export the consolidated report as Excel or PDF
+      parameters:
+        - { name: format, in: query, required: true, schema: { type: string, enum: [xlsx, pdf] } }
+      responses:
+        '200':
+          description: Exported file (figures reconcile to /reports/summary)
+          content:
+            application/octet-stream:
+              schema: { type: string, format: binary }
+
+  /integrations/contracts/{id}/sign:
+    post:
+      tags: [Integrations]
+      summary: Trigger digital signature via VATM digital-signature service
+      parameters: [ { $ref: '#/components/parameters/ContractId' } ]
+      responses:
+        '200':
+          description: Signed status/document recorded on the contract
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Contract' }
+        '502':
+          description: Integration unavailable
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+  /integrations/contracts/{id}/accounting/reconcile:
+    post:
+      tags: [Integrations]
+      summary: Reconcile contract financials with the accounting system
+      parameters: [ { $ref: '#/components/parameters/ContractId' } ]
+      responses:
+        '200': { description: Reconciliation result }
+
+  /audit:
+    get:
+      tags: [Audit]
+      summary: Query the immutable audit log (admin)
+      parameters:
+        - { name: entityId, in: query, schema: { type: string, format: uuid } }
+        - { name: actorId, in: query, schema: { type: string, format: uuid } }
+        - { name: page, in: query, schema: { type: integer, default: 0 } }
+      responses:
+        '200':
+          description: Audit entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/AuditLogEntry' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    ContractId:
+      name: id
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+  responses:
+    Forbidden:
+      description: Caller lacks permission or is out of unit scope
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+    NotFound:
+      description: Not found
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+    ValidationError:
+      description: Missing/invalid fields
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+  schemas:
+    ContractStatus:
+      type: string
+      enum: [DRAFT, PENDING_CHECK, PENDING_TCT_APPROVAL, ACTIVE, IN_PROGRESS, COMPLETED, LIQUIDATED]
+    ContractType:
+      type: string
+      enum: [PURCHASE_SALE, SERVICE, CONSTRUCTION, LEASE, LABOR]
+    AlertType:
+      type: string
+      enum: [NEARING_EXPIRY, UNSIGNED, UNPAID, BEHIND_SCHEDULE]
+    OrganizationalUnit:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        code: { type: string }
+        name: { type: string }
+        type: { type: string, enum: [TCT, SUBORDINATE] }
+        active: { type: boolean }
+    User:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        fullName: { type: string }
+        email: { type: string }
+        unitId: { type: string, format: uuid }
+        roles:
+          type: array
+          items: { $ref: '#/components/schemas/RoleAssignment' }
+    RoleAssignment:
+      type: object
+      properties:
+        role: { type: string, enum: [DATA_ENTRY, UNIT_HEAD, MANAGEMENT, ADMIN] }
+        scopeUnitId: { type: string, format: uuid, nullable: true }
+    ContractInput:
+      type: object
+      required: [contractNumber, name, type, partyA, partyB, value, signDate, termEnd, personInChargeId]
+      properties:
+        contractNumber: { type: string }
+        name: { type: string }
+        type: { $ref: '#/components/schemas/ContractType' }
+        partyA: { type: string }
+        partyB: { type: string }
+        value: { type: number }
+        signDate: { type: string, format: date }
+        termEnd: { type: string, format: date }
+        personInChargeId: { type: string, format: uuid }
+        isOfficial: { type: boolean }
+        extraFields: { type: object, additionalProperties: true }
+    Contract:
+      allOf:
+        - $ref: '#/components/schemas/ContractInput'
+        - type: object
+          properties:
+            id: { type: string, format: uuid }
+            status: { $ref: '#/components/schemas/ContractStatus' }
+            owningUnitId: { type: string, format: uuid }
+            signed: { type: boolean }
+            paymentStatus: { type: string, enum: [UNPAID, PARTIAL, PAID] }
+            progressPct: { type: integer }
+            createdAt: { type: string, format: date-time }
+            updatedAt: { type: string, format: date-time }
+    ContractPage:
+      type: object
+      properties:
+        content:
+          type: array
+          items: { $ref: '#/components/schemas/Contract' }
+        page: { type: integer }
+        size: { type: integer }
+        total: { type: integer }
+    Attachment:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        contractId: { type: string, format: uuid }
+        filename: { type: string }
+        contentType: { type: string }
+        kind: { type: string, enum: [MAIN, SCAN, APPENDIX, OTHER] }
+        sizeBytes: { type: integer }
+        uploadedAt: { type: string, format: date-time }
+    WorkflowActionInput:
+      type: object
+      required: [action]
+      properties:
+        action: { type: string, enum: [SUBMIT, CHECK_APPROVE, TCT_APPROVE, REJECT, LIQUIDATE] }
+        reason: { type: string, description: Required when action = REJECT }
+    Alert:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        contractId: { type: string, format: uuid }
+        type: { $ref: '#/components/schemas/AlertType' }
+        status: { type: string, enum: [OPEN, ACKNOWLEDGED, RESOLVED] }
+        raisedAt: { type: string, format: date-time }
+    ReportSummary:
+      type: object
+      properties:
+        totalContracts: { type: integer }
+        totalValue: { type: number }
+        nearingExpiry: { type: integer }
+        inProgress: { type: integer }
+        perUnit:
+          type: array
+          items:
+            type: object
+            properties:
+              unitId: { type: string, format: uuid }
+              unitName: { type: string }
+              contractCount: { type: integer }
+              totalValue: { type: number }
+    AuditLogEntry:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        actorId: { type: string, format: uuid }
+        action: { type: string }
+        entityType: { type: string }
+        entityId: { type: string, format: uuid }
+        createdAt: { type: string, format: date-time }
+    Problem:
+      type: object
+      description: RFC 7807 problem detail
+      properties:
+        type: { type: string }
+        title: { type: string }
+        status: { type: integer }
+        detail: { type: string }
+        code: { type: string }
