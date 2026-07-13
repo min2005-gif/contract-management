@@ -13,3 +13,5 @@ app:
     max-size-bytes: 52428800
   workflow:
     tct-approval-threshold: 100000000
+  report:
+    nearing-expiry-days: 30

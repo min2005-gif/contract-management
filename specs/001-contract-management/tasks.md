@@ -154,17 +154,17 @@ xlsx and pdf matching on-screen figures.
 
 ### Tests for User Story 3 ⚠️ (write first, must fail)
 
-- [ ] T052 [P] [US3] Report reconciliation test — per-unit sums equal totals (SC-004) + access control (TCT/management only) in `backend/src/test/java/vn/vatm/contract/report/ReportSummaryTest.java`
-- [ ] T053 [P] [US3] Export test — xlsx and pdf generated with figures matching the summary in `backend/src/test/java/vn/vatm/contract/report/ReportExportTest.java`
+- [X] T052 [P] [US3] Report reconciliation test — per-unit sums equal totals (SC-004) + access control (TCT/management only) in `backend/src/test/java/vn/vatm/contract/report/ReportSummaryTest.java`
+- [X] T053 [P] [US3] Export test — xlsx and pdf generated with figures matching the summary in `backend/src/test/java/vn/vatm/contract/report/ReportExportTest.java`
 - [ ] T054 [P] [US3] Web E2E test — dashboard renders per-unit breakdown + charts and triggers xlsx/pdf export in `frontend/tests/reports.spec.ts`
 
 ### Implementation for User Story 3
 
-- [ ] T055 [US3] Implement ReportService aggregate queries (totals, nearing-expiry, in-progress, per-unit) in `backend/src/main/java/vn/vatm/contract/report/ReportService.java`
-- [ ] T056 [US3] Implement ReportController (`GET /reports/summary`) in `backend/src/main/java/vn/vatm/contract/report/ReportController.java`
-- [ ] T057 [P] [US3] Implement Excel export (Apache POI) in `backend/src/main/java/vn/vatm/contract/report/ExcelExporter.java`
-- [ ] T058 [P] [US3] Implement PDF export (JasperReports/OpenPDF) in `backend/src/main/java/vn/vatm/contract/report/PdfExporter.java`
-- [ ] T059 [US3] Implement export endpoint (`GET /reports/export?format=`; emits a security-log export event) in `backend/src/main/java/vn/vatm/contract/report/ReportController.java`
+- [X] T055 [US3] Implement ReportService aggregate queries (totals, nearing-expiry, in-progress, per-unit) in `backend/src/main/java/vn/vatm/contract/report/ReportService.java`
+- [X] T056 [US3] Implement ReportController (`GET /reports/summary`) in `backend/src/main/java/vn/vatm/contract/report/ReportController.java`
+- [X] T057 [P] [US3] Implement Excel export (Apache POI) in `backend/src/main/java/vn/vatm/contract/report/ExcelExporter.java`
+- [X] T058 [P] [US3] Implement PDF export (JasperReports/OpenPDF) in `backend/src/main/java/vn/vatm/contract/report/PdfExporter.java`
+- [X] T059 [US3] Implement export endpoint (`GET /reports/export?format=`; emits a security-log export event) in `backend/src/main/java/vn/vatm/contract/report/ReportController.java`
 - [ ] T060 [US3] Web: consolidated dashboard with Recharts charts, per-unit breakdown, and export buttons in `frontend/src/features/reports/Dashboard.tsx`
 
 **Checkpoint**: Leadership gets cross-unit visibility and exportable reports.
