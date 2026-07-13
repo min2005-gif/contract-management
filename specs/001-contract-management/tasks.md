@@ -181,18 +181,18 @@ alert per condition (idempotent) and notification to the person in charge.
 
 ### Tests for User Story 4 ⚠️ (write first, must fail)
 
-- [ ] T061 [P] [US4] Alert evaluation tests for all four conditions (using default thresholds) + idempotency (no duplicate OPEN) in `backend/src/test/java/vn/vatm/contract/alert/AlertEvaluationTest.java`
-- [ ] T062 [P] [US4] Notification routing test — alert goes to the contract's person in charge in `backend/src/test/java/vn/vatm/contract/alert/AlertNotificationTest.java`
+- [X] T061 [P] [US4] Alert evaluation tests for all four conditions (using default thresholds) + idempotency (no duplicate OPEN) in `backend/src/test/java/vn/vatm/contract/alert/AlertEvaluationTest.java`
+- [X] T062 [P] [US4] Notification routing test — alert goes to the contract's person in charge in `backend/src/test/java/vn/vatm/contract/alert/AlertNotificationTest.java`
 - [ ] T063 [P] [US4] Web test — alerts list rendering + navbar badge in `frontend/tests/alerts.spec.ts`
 - [ ] T064 [P] [US4] Mobile test — alerts list in `mobile/test/alerts_test.dart`
 
 ### Implementation for User Story 4
 
-- [ ] T065 [P] [US4] Create the Alert entity + migration `V9__alerts.sql` with a unique partial index on `(contract_id, type)` where `status='OPEN'` in `backend/src/main/java/vn/vatm/contract/alert/Alert.java`
-- [ ] T066 [US4] Implement AlertEvaluationService (four configurable rules per FR-016, idempotent raise/update) in `backend/src/main/java/vn/vatm/contract/alert/AlertEvaluationService.java`
-- [ ] T067 [US4] Implement the scheduled evaluation job + dev-only trigger endpoint in `backend/src/main/java/vn/vatm/contract/alert/AlertScheduler.java`
-- [ ] T068 [P] [US4] Implement NotificationService (in-app + email to person in charge) in `backend/src/main/java/vn/vatm/contract/alert/NotificationService.java`
-- [ ] T069 [US4] Implement AlertController (`GET /alerts`, `PATCH /alerts/{id}` acknowledge/resolve) in `backend/src/main/java/vn/vatm/contract/alert/AlertController.java`
+- [X] T065 [P] [US4] Create the Alert entity + migration `V9__alerts.sql` with a unique partial index on `(contract_id, type)` where `status='OPEN'` in `backend/src/main/java/vn/vatm/contract/alert/Alert.java`
+- [X] T066 [US4] Implement AlertEvaluationService (four configurable rules per FR-016, idempotent raise/update) in `backend/src/main/java/vn/vatm/contract/alert/AlertEvaluationService.java`
+- [X] T067 [US4] Implement the scheduled evaluation job + dev-only trigger endpoint in `backend/src/main/java/vn/vatm/contract/alert/AlertScheduler.java`
+- [X] T068 [P] [US4] Implement NotificationService (in-app + email to person in charge) in `backend/src/main/java/vn/vatm/contract/alert/NotificationService.java`
+- [X] T069 [US4] Implement AlertController (`GET /alerts`, `PATCH /alerts/{id}` acknowledge/resolve) in `backend/src/main/java/vn/vatm/contract/alert/AlertController.java`
 - [ ] T070 [P] [US4] Web: alerts list + navbar badge in `frontend/src/features/alerts/AlertsPage.tsx`
 - [ ] T071 [P] [US4] Mobile: alerts list (+ push notification hook) in `mobile/lib/features/alerts/`
 

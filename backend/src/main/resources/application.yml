@@ -29,6 +29,11 @@ app:
   report:
     # Window (days) used to flag contracts as "nearing expiry" (FR-016/FR-018).
     nearing-expiry-days: ${APP_NEARING_EXPIRY_DAYS:30}
+  alert:
+    # "Nearing expiry" window (days) for alert evaluation (FR-016).
+    nearing-expiry-days: ${APP_ALERT_NEARING_EXPIRY_DAYS:30}
+    # Cron for the scheduled evaluation pass; default hourly on the hour.
+    cron: ${APP_ALERT_CRON:0 0 * * * *}
   storage:
     minio:
       endpoint: ${MINIO_ENDPOINT:http://localhost:9000}

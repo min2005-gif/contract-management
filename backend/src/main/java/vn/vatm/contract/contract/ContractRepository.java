@@ -17,6 +17,9 @@ public interface ContractRepository
 
   Optional<Contract> findByOwningUnitIdAndContractNumber(UUID owningUnitId, String contractNumber);
 
+  /** Non-terminal contracts eligible for alert evaluation (excludes the given status). */
+  List<Contract> findByStatusNot(ContractStatus status);
+
   // --- Reporting aggregates (US3) ---
 
   @Query("select coalesce(sum(c.value), 0) from Contract c")

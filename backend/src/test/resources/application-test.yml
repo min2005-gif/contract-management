@@ -15,3 +15,7 @@ app:
     tct-approval-threshold: 100000000
   report:
     nearing-expiry-days: 30
+  alert:
+    nearing-expiry-days: 30
+    # "-" disables the @Scheduled task so the evaluation cron never fires during tests.
+    cron: "-"
