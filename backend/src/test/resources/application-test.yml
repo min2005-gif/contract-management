@@ -11,3 +11,5 @@ app:
     secret: test-secret-with-a-sufficiently-long-value-for-hs256-0001
   attachment:
     max-size-bytes: 52428800
+  workflow:
+    tct-approval-threshold: 100000000

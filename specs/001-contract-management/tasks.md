@@ -124,16 +124,16 @@ TCT approval.
 
 ### Tests for User Story 2 ⚠️ (write first, must fail)
 
-- [ ] T041 [P] [US2] State-machine + transition-legality tests (illegal transition → 409) in `backend/src/test/java/vn/vatm/contract/workflow/WorkflowStateMachineTest.java`
-- [ ] T042 [P] [US2] Role/workflow tests: unit-head check, official/threshold rule requires TCT approval (FR-013), reject returns to DRAFT, business audit recorded in `backend/src/test/java/vn/vatm/contract/workflow/WorkflowRulesTest.java`
+- [X] T041 [P] [US2] State-machine + transition-legality tests (illegal transition → 409) in `backend/src/test/java/vn/vatm/contract/workflow/WorkflowStateMachineTest.java`
+- [X] T042 [P] [US2] Role/workflow tests: unit-head check, official/threshold rule requires TCT approval (FR-013), reject returns to DRAFT, business audit recorded in `backend/src/test/java/vn/vatm/contract/workflow/WorkflowRulesTest.java`
 - [ ] T043 [P] [US2] Web E2E test — review queue approve/reject-with-reason and TCT approval flow in `frontend/tests/approvals.spec.ts`
 - [ ] T044 [P] [US2] Mobile test — approval queue approve/reject actions in `mobile/test/approvals_test.dart`
 
 ### Implementation for User Story 2
 
-- [ ] T045 [P] [US2] Create the WorkflowStep entity + migration `V8__workflow_steps.sql` in `backend/src/main/java/vn/vatm/contract/workflow/WorkflowStep.java`
-- [ ] T046 [US2] Implement WorkflowService (state machine, configurable official/threshold rule per FR-013, reject reason, status updates, business-audit emit) in `backend/src/main/java/vn/vatm/contract/workflow/WorkflowService.java`
-- [ ] T047 [US2] Implement WorkflowController (`POST /contracts/{id}/workflow`) in `backend/src/main/java/vn/vatm/contract/workflow/WorkflowController.java`
+- [X] T045 [P] [US2] Create the WorkflowStep entity + migration `V8__workflow_steps.sql` in `backend/src/main/java/vn/vatm/contract/workflow/WorkflowStep.java`
+- [X] T046 [US2] Implement WorkflowService (state machine, configurable official/threshold rule per FR-013, reject reason, status updates, business-audit emit) in `backend/src/main/java/vn/vatm/contract/workflow/WorkflowService.java`
+- [X] T047 [US2] Implement WorkflowController (`POST /contracts/{id}/workflow`) in `backend/src/main/java/vn/vatm/contract/workflow/WorkflowController.java`
 - [ ] T048 [P] [US2] Web: unit-head review queue with approve/reject (reason) in `frontend/src/features/approvals/ReviewQueue.tsx`
 - [ ] T049 [P] [US2] Web: TCT approval view for official contracts in `frontend/src/features/approvals/TctApproval.tsx`
 - [ ] T050 [P] [US2] Web: contract detail status timeline (WorkflowStep history) in `frontend/src/features/contracts/StatusTimeline.tsx`

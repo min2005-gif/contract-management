@@ -20,6 +20,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.testcontainers.containers.PostgreSQLContainer;
 import vn.vatm.contract.org.Role;
@@ -99,5 +100,39 @@ public abstract class AbstractIntegrationTest {
             .getResponse()
             .getContentAsString();
     return objectMapper.readTree(response).get("id").asText();
+  }
+
+  /** Creates an official contract (requires TCT approval) as the given user and returns its id. */
+  protected String createOfficialContract(RequestPostProcessor user, String number)
+      throws Exception {
+    Map<String, Object> body = contractBody(number);
+    body.put("official", true);
+    String response =
+        mockMvc
+            .perform(
+                post("/api/v1/contracts")
+                    .with(user)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(body)))
+            .andExpect(status().isCreated())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+    return objectMapper.readTree(response).get("id").asText();
+  }
+
+  /** Performs a workflow action on a contract and returns the raw result for assertions. */
+  protected ResultActions performWorkflow(
+      RequestPostProcessor user, String contractId, String action, String reason) throws Exception {
+    Map<String, Object> body = new HashMap<>();
+    body.put("action", action);
+    if (reason != null) {
+      body.put("reason", reason);
+    }
+    return mockMvc.perform(
+        post("/api/v1/contracts/{id}/workflow", contractId)
+            .with(user)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(body)));
   }
 }
