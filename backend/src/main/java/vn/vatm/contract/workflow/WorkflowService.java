@@ -55,6 +55,20 @@ public class WorkflowService {
     this.tctApprovalThreshold = tctApprovalThreshold;
   }
 
+  @Transactional(readOnly = true)
+  public java.util.List<WorkflowStepResponse> history(UUID contractId) {
+    CurrentUser user = currentUserService.require();
+    Contract contract =
+        contracts
+            .findById(contractId)
+            .orElseThrow(
+                () -> new NotFoundException("Không tìm thấy hợp đồng. / Contract not found."));
+    accessControl.requireUnitAccess(user, contract.getOwningUnitId());
+    return steps.findByContractIdOrderByCreatedAtAsc(contractId).stream()
+        .map(WorkflowStepResponse::from)
+        .toList();
+  }
+
   @Transactional
   public ContractResponse perform(UUID contractId, WorkflowActionRequest request) {
     CurrentUser user = currentUserService.require();

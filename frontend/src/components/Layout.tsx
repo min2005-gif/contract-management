@@ -10,11 +10,20 @@ export function Layout() {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
+  const canSeeReports =
+    profile.unit === 'TCT' ||
+    profile.roles.includes('MANAGEMENT') ||
+    profile.roles.includes('ADMIN');
+
   return (
     <div className="app">
       <header className="app-header">
         <div className="brand">
           <Link to="/contracts">Quản lý hợp đồng VATM</Link>
+          <nav className="nav">
+            <Link to="/contracts">Hợp đồng</Link>
+            {canSeeReports && <Link to="/dashboard">Báo cáo</Link>}
+          </nav>
         </div>
         <div className="user">
           <span>

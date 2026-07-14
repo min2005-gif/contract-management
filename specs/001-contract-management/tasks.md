@@ -134,9 +134,9 @@ TCT approval.
 - [X] T045 [P] [US2] Create the WorkflowStep entity + migration `V8__workflow_steps.sql` in `backend/src/main/java/vn/vatm/contract/workflow/WorkflowStep.java`
 - [X] T046 [US2] Implement WorkflowService (state machine, configurable official/threshold rule per FR-013, reject reason, status updates, business-audit emit) in `backend/src/main/java/vn/vatm/contract/workflow/WorkflowService.java`
 - [X] T047 [US2] Implement WorkflowController (`POST /contracts/{id}/workflow`) in `backend/src/main/java/vn/vatm/contract/workflow/WorkflowController.java`
-- [ ] T048 [P] [US2] Web: unit-head review queue with approve/reject (reason) in `frontend/src/features/approvals/ReviewQueue.tsx`
-- [ ] T049 [P] [US2] Web: TCT approval view for official contracts in `frontend/src/features/approvals/TctApproval.tsx`
-- [ ] T050 [P] [US2] Web: contract detail status timeline (WorkflowStep history) in `frontend/src/features/contracts/StatusTimeline.tsx`
+- [X] T048 [P] [US2] Web: unit-head review queue with approve/reject (reason) in `frontend/src/features/approvals/ReviewQueue.tsx`
+- [X] T049 [P] [US2] Web: TCT approval view for official contracts in `frontend/src/features/approvals/TctApproval.tsx`
+- [X] T050 [P] [US2] Web: contract detail status timeline (WorkflowStep history) in `frontend/src/features/contracts/StatusTimeline.tsx`
 - [ ] T051 [P] [US2] Mobile: approval queue + approve/reject actions in `mobile/lib/features/approvals/`
 
 **Checkpoint**: US1 + US2 work together — contracts can be recorded and driven through official
@@ -165,7 +165,7 @@ xlsx and pdf matching on-screen figures.
 - [X] T057 [P] [US3] Implement Excel export (Apache POI) in `backend/src/main/java/vn/vatm/contract/report/ExcelExporter.java`
 - [X] T058 [P] [US3] Implement PDF export (JasperReports/OpenPDF) in `backend/src/main/java/vn/vatm/contract/report/PdfExporter.java`
 - [X] T059 [US3] Implement export endpoint (`GET /reports/export?format=`; emits a security-log export event) in `backend/src/main/java/vn/vatm/contract/report/ReportController.java`
-- [ ] T060 [US3] Web: consolidated dashboard with Recharts charts, per-unit breakdown, and export buttons in `frontend/src/features/reports/Dashboard.tsx`
+- [X] T060 [US3] Web: consolidated dashboard with Recharts charts, per-unit breakdown, and export buttons in `frontend/src/features/reports/Dashboard.tsx`
 
 **Checkpoint**: Leadership gets cross-unit visibility and exportable reports.
 

@@ -3,6 +3,7 @@ import { Layout } from './components/Layout';
 import { LoginPage } from './auth/LoginPage';
 import { ContractListPage } from './features/contracts/ContractListPage';
 import { ContractFormPage } from './features/contracts/ContractFormPage';
+import { DashboardPage } from './features/reports/DashboardPage';
 
 export function App() {
   return (
@@ -12,6 +13,7 @@ export function App() {
         <Route path="/contracts" element={<ContractListPage />} />
         <Route path="/contracts/new" element={<ContractFormPage />} />
         <Route path="/contracts/:id" element={<ContractFormPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/" element={<Navigate to="/contracts" replace />} />
       </Route>
       <Route path="*" element={<Navigate to="/contracts" replace />} />

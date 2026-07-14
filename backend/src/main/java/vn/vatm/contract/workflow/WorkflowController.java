@@ -1,7 +1,9 @@
 package vn.vatm.contract.workflow;
 
 import jakarta.validation.Valid;
+import java.util.List;
 import java.util.UUID;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,5 +26,10 @@ public class WorkflowController {
   public ContractResponse perform(
       @PathVariable UUID id, @Valid @RequestBody WorkflowActionRequest request) {
     return service.perform(id, request);
+  }
+
+  @GetMapping
+  public List<WorkflowStepResponse> history(@PathVariable UUID id) {
+    return service.history(id);
   }
 }
