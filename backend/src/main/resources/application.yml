@@ -17,6 +17,9 @@ spring:
       max-request-size: 64MB
 
 app:
+  # Comma-separated origins allowed to call the API (the web app in dev).
+  cors:
+    allowed-origins: ${APP_CORS_ALLOWED_ORIGINS:http://localhost:5173}
   # Local/dev symmetric JWT secret. Production federates to VATM SSO/AD via issuer-uri/JWKS.
   jwt:
     secret: ${APP_JWT_SECRET:dev-secret-change-me-please-with-a-long-random-value-0001}

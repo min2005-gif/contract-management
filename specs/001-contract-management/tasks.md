@@ -38,7 +38,7 @@ its implementation and MUST fail first.
 
 - [X] T001 Create the monorepo structure (`backend/`, `frontend/`, `mobile/`, `deploy/`, `specs/` already present) per plan.md Project Structure
 - [X] T002 Initialize the Spring Boot backend in `backend/` (Gradle, Java 21, Spring Boot 3.3 with Web, Security, Data JPA, Flyway, Actuator dependencies)
-- [ ] T003 [P] Initialize the React + TypeScript web app in `frontend/` (Vite, React 18, React Query, Recharts)
+- [X] T003 [P] Initialize the React + TypeScript web app in `frontend/` (Vite, React 18, React Query, Recharts)
 - [ ] T004 [P] Initialize the Flutter app in `mobile/` (Flutter 3.x, Dio, Riverpod)
 - [X] T005 [P] Create `deploy/docker-compose.dev.yml` with PostgreSQL 16, MinIO, and a dev Keycloak (SSO/AD stand-in)
 - [X] T006 [P] Configure backend formatting/linting (Spotless + Checkstyle) with a Gradle `check` task in `backend/build.gradle`
@@ -67,7 +67,7 @@ its implementation and MUST fail first.
 - [X] T018 [P] Configure MinIO client + storage abstraction (upload/download/delete, key strategy) in `backend/src/main/java/vn/vatm/contract/config/StorageConfig.java`
 - [X] T019 [P] Implement RFC 7807 `application/problem+json` global exception handling with Vietnamese-first messages (incl. validation, conflict, and forbidden mappings) in `backend/src/main/java/vn/vatm/contract/config/ProblemHandler.java`
 - [X] T020 Wire `/api/v1` versioning + generate the OpenAPI doc from `contracts/openapi.yaml` (springdoc) in `backend/src/main/java/vn/vatm/contract/config/OpenApiConfig.java`
-- [ ] T021 [P] Build the web app shell in `frontend/src/` (OIDC login flow, protected routing, generated API client from `contracts/openapi.yaml`, Vietnamese i18n, shared design-system components)
+- [X] T021 [P] Build the web app shell in `frontend/src/` (OIDC login flow, protected routing, generated API client from `contracts/openapi.yaml`, Vietnamese i18n, shared design-system components)
 - [ ] T022 [P] Build the mobile app shell in `mobile/lib/` (OIDC login, generated API client, shared theme/design system, Vietnamese i18n)
 - [X] T023 Set up the backend test harness (JUnit 5 + Spring Boot Test + Testcontainers for PostgreSQL/MinIO) in `backend/src/test/java/vn/vatm/contract/support/`
 
@@ -91,7 +91,7 @@ same unit is rejected.
 - [X] T025 [P] [US1] Integration test for owning-unit scoping (cross-unit access → 403) in `backend/src/test/java/vn/vatm/contract/contract/ContractScopingTest.java`
 - [X] T026 [P] [US1] Integration test for required-field validation (FR-011), per-unit contract-number uniqueness (FR-026), and optimistic-concurrency conflict on concurrent edit in `backend/src/test/java/vn/vatm/contract/contract/ContractValidationTest.java`
 - [X] T027 [P] [US1] Integration test for attachment upload/download plus type/size-limit rejection (FR-010) in `backend/src/test/java/vn/vatm/contract/attachment/AttachmentTest.java`
-- [ ] T028 [P] [US1] Web test — contract form validation, list rendering, and unit-scoped visibility (Vitest + Testing Library, Playwright E2E) in `frontend/tests/contracts.spec.ts`
+- [X] T028 [P] [US1] Web test — contract form validation, list rendering, and unit-scoped visibility (Vitest + Testing Library, Playwright E2E) in `frontend/tests/contracts.spec.ts`
 - [ ] T029 [P] [US1] Mobile test — contract create/list widget + integration test in `mobile/test/contracts_test.dart`
 
 ### Implementation for User Story 1
@@ -103,9 +103,9 @@ same unit is rejected.
 - [X] T034 [US1] Implement AttachmentService (MinIO put/get/delete, content-type allowlist + max-size validation per FR-010) in `backend/src/main/java/vn/vatm/contract/attachment/AttachmentService.java`
 - [X] T035 [US1] Implement ContractController (`/contracts` CRUD + list/search) in `backend/src/main/java/vn/vatm/contract/contract/ContractController.java`
 - [X] T036 [US1] Implement AttachmentController (`/contracts/{id}/attachments` upload/list/download/delete; downloads emit a security-log event) in `backend/src/main/java/vn/vatm/contract/attachment/AttachmentController.java`
-- [ ] T037 [P] [US1] Web: contract list + search page in `frontend/src/features/contracts/ContractListPage.tsx`
-- [ ] T038 [P] [US1] Web: contract create/edit form with client + server validation (incl. duplicate-number and conflict messages) in `frontend/src/features/contracts/ContractForm.tsx`
-- [ ] T039 [P] [US1] Web: attachment upload/download component with type/size feedback in `frontend/src/features/contracts/Attachments.tsx`
+- [X] T037 [P] [US1] Web: contract list + search page in `frontend/src/features/contracts/ContractListPage.tsx`
+- [X] T038 [P] [US1] Web: contract create/edit form with client + server validation (incl. duplicate-number and conflict messages) in `frontend/src/features/contracts/ContractForm.tsx`
+- [X] T039 [P] [US1] Web: attachment upload/download component with type/size feedback in `frontend/src/features/contracts/Attachments.tsx`
 - [ ] T040 [P] [US1] Mobile: contract list, create/edit, and attachment screens in `mobile/lib/features/contracts/`
 
 **Checkpoint**: US1 fully functional and independently testable — a unit can maintain its contract

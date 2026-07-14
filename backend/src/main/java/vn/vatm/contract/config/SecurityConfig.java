@@ -8,6 +8,7 @@ import javax.crypto.spec.SecretKeySpec;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -18,6 +19,9 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 /**
  * Stateless security: the API is an OAuth2 resource server that trusts JWTs issued by VATM's SSO/AD
@@ -32,6 +36,7 @@ public class SecurityConfig {
 
   private static final String[] PUBLIC_PATHS = {
     "/api/v1/health",
+    "/api/v1/dev/**",
     "/actuator/health",
     "/actuator/health/**",
     "/v3/api-docs/**",
@@ -40,14 +45,19 @@ public class SecurityConfig {
   };
 
   private final GroupRoleMapper groupRoleMapper;
+  private final String allowedOrigins;
 
-  public SecurityConfig(GroupRoleMapper groupRoleMapper) {
+  public SecurityConfig(
+      GroupRoleMapper groupRoleMapper,
+      @Value("${app.cors.allowed-origins:http://localhost:5173}") String allowedOrigins) {
     this.groupRoleMapper = groupRoleMapper;
+    this.allowedOrigins = allowedOrigins;
   }
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf(AbstractHttpConfigurer::disable)
+        .cors(Customizer.withDefaults())
         .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(
             auth -> auth.requestMatchers(PUBLIC_PATHS).permitAll().anyRequest().authenticated())
@@ -55,6 +65,17 @@ public class SecurityConfig {
             oauth ->
                 oauth.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())));
     return http.build();
+  }
+
+  @Bean
+  public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration config = new CorsConfiguration();
+    config.setAllowedOrigins(List.of(allowedOrigins.split(",")));
+    config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+    config.setAllowedHeaders(List.of("*"));
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", config);
+    return source;
   }
 
   @Bean
