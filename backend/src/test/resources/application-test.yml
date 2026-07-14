@@ -7,6 +7,8 @@ spring:
     enabled: true
 
 app:
+  storage:
+    type: memory
   jwt:
     secret: test-secret-with-a-sufficiently-long-value-for-hs256-0001
   attachment:

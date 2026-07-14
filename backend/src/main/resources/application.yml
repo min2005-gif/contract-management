@@ -2,7 +2,7 @@ spring:
   application:
     name: contract-backend
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/contract}
+    url: ${DB_URL:jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:contract}}
     username: ${DB_USERNAME:contract}
     password: ${DB_PASSWORD:contract}
   jpa:
@@ -38,6 +38,9 @@ app:
     # Cron for the scheduled evaluation pass; default hourly on the hour.
     cron: ${APP_ALERT_CRON:0 0 * * * *}
   storage:
+    # minio (default) | filesystem | memory. Free-tier deploys use filesystem.
+    type: ${APP_STORAGE_TYPE:minio}
+    dir: ${APP_STORAGE_DIR:./attachments}
     minio:
       endpoint: ${MINIO_ENDPOINT:http://localhost:9000}
       access-key: ${MINIO_ACCESS_KEY:minioadmin}
@@ -49,4 +52,5 @@ springdoc:
     path: /swagger-ui.html
 
 server:
-  port: 8080
+  # Render (and most PaaS) inject the port via $PORT.
+  port: ${PORT:8080}

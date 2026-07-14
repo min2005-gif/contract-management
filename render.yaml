@@ -1,0 +1,48 @@
+# Render Blueprint — backend (Spring Boot, Docker) + free PostgreSQL.
+# Deploy: on render.com -> New -> Blueprint -> pick this repo. Region: Singapore (gần VN).
+services:
+  - type: web
+    name: contract-backend
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    healthCheckPath: /api/v1/health
+    envVars:
+      # Demo mode: enables the dev-token login so the site is usable without a real IdP.
+      - key: SPRING_PROFILES_ACTIVE
+        value: dev
+      - key: APP_STORAGE_TYPE
+        value: filesystem
+      - key: APP_STORAGE_DIR
+        value: /tmp/attachments
+      - key: APP_JWT_SECRET
+        generateValue: true
+      - key: APP_CORS_ALLOWED_ORIGINS
+        value: https://bongto.space
+      - key: DB_HOST
+        fromDatabase:
+          name: contract-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: contract-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: contract-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: contract-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: contract-db
+          property: password
+
+databases:
+  - name: contract-db
+    plan: free
+    region: singapore

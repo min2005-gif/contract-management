@@ -10,12 +10,14 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Profile;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
-/** MinIO-backed {@link StorageService} for production/dev (T018). */
+/**
+ * MinIO-backed {@link StorageService}; the default when {@code app.storage.type} is unset (T018).
+ */
 @Service
-@Profile("!test")
+@ConditionalOnProperty(name = "app.storage.type", havingValue = "minio", matchIfMissing = true)
 public class MinioStorageService implements StorageService {
 
   private final MinioClient client;
