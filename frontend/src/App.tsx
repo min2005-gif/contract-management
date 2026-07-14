@@ -4,6 +4,7 @@ import { LoginPage } from './auth/LoginPage';
 import { ContractListPage } from './features/contracts/ContractListPage';
 import { ContractFormPage } from './features/contracts/ContractFormPage';
 import { DashboardPage } from './features/reports/DashboardPage';
+import { AlertsPage } from './features/alerts/AlertsPage';
 
 export function App() {
   return (
@@ -14,6 +15,7 @@ export function App() {
         <Route path="/contracts/new" element={<ContractFormPage />} />
         <Route path="/contracts/:id" element={<ContractFormPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/alerts" element={<AlertsPage />} />
         <Route path="/" element={<Navigate to="/contracts" replace />} />
       </Route>
       <Route path="*" element={<Navigate to="/contracts" replace />} />

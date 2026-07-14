@@ -22,6 +22,7 @@ export function Layout() {
           <Link to="/contracts">Quản lý hợp đồng VATM</Link>
           <nav className="nav">
             <Link to="/contracts">Hợp đồng</Link>
+            <Link to="/alerts">Cảnh báo</Link>
             {canSeeReports && <Link to="/dashboard">Báo cáo</Link>}
           </nav>
         </div>

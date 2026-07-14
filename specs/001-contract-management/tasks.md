@@ -193,7 +193,7 @@ alert per condition (idempotent) and notification to the person in charge.
 - [X] T067 [US4] Implement the scheduled evaluation job + dev-only trigger endpoint in `backend/src/main/java/vn/vatm/contract/alert/AlertScheduler.java`
 - [X] T068 [P] [US4] Implement NotificationService (in-app + email to person in charge) in `backend/src/main/java/vn/vatm/contract/alert/NotificationService.java`
 - [X] T069 [US4] Implement AlertController (`GET /alerts`, `PATCH /alerts/{id}` acknowledge/resolve) in `backend/src/main/java/vn/vatm/contract/alert/AlertController.java`
-- [ ] T070 [P] [US4] Web: alerts list + navbar badge in `frontend/src/features/alerts/AlertsPage.tsx`
+- [X] T070 [P] [US4] Web: alerts list + navbar badge in `frontend/src/features/alerts/AlertsPage.tsx`
 - [ ] T071 [P] [US4] Mobile: alerts list (+ push notification hook) in `mobile/lib/features/alerts/`
 
 **Checkpoint**: Proactive risk alerts are delivered to responsible users.
@@ -220,7 +220,7 @@ integration returns 502 with no partial state; accounting reconcile returns a re
 - [X] T076 [US5] Implement the digital-signature adapter + `POST /integrations/contracts/{id}/sign` in `backend/src/main/java/vn/vatm/contract/integration/SignatureController.java`
 - [X] T077 [P] [US5] Implement e-document linking (reference/link a related document) in `backend/src/main/java/vn/vatm/contract/integration/EDocumentService.java`
 - [X] T078 [US5] Implement the accounting adapter + `POST /integrations/contracts/{id}/accounting/reconcile` in `backend/src/main/java/vn/vatm/contract/integration/AccountingController.java`
-- [ ] T079 [P] [US5] Web: sign / reconcile actions on the contract detail page in `frontend/src/features/contracts/IntegrationActions.tsx`
+- [X] T079 [P] [US5] Web: sign / reconcile actions on the contract detail page in `frontend/src/features/contracts/IntegrationActions.tsx`
 
 **Checkpoint**: All user stories complete and independently functional.
 

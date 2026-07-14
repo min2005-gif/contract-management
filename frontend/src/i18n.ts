@@ -25,6 +25,19 @@ export const paymentStatusLabels: Record<PaymentStatus, string> = {
   PAID: 'Đã thanh toán',
 };
 
+export const alertTypeLabels: Record<string, string> = {
+  NEARING_EXPIRY: 'Sắp hết hạn',
+  UNSIGNED: 'Chưa ký',
+  UNPAID: 'Chưa thanh toán',
+  BEHIND_SCHEDULE: 'Chậm tiến độ',
+};
+
+export const alertStatusLabels: Record<string, string> = {
+  OPEN: 'Mở',
+  ACKNOWLEDGED: 'Đã tiếp nhận',
+  RESOLVED: 'Đã xử lý',
+};
+
 export function formatCurrency(value: number): string {
   return new Intl.NumberFormat('vi-VN', {
     style: 'currency',
