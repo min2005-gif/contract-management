@@ -43,24 +43,34 @@ export function LoginPage() {
 
   return (
     <div className="login">
-      <form className="card login-card" onSubmit={submit}>
-        <h1>Quản lý hợp đồng VATM</h1>
-        <p className="muted">Đăng nhập (môi trường phát triển)</p>
-        <label>
-          Vai trò đăng nhập
-          <select value={index} onChange={(e) => setIndex(Number(e.target.value))}>
-            {PRESETS.map((p, i) => (
-              <option key={p.subject} value={i}>
-                {p.label}
-              </option>
-            ))}
-          </select>
-        </label>
-        {error && <p className="error">{error}</p>}
-        <button type="submit" disabled={busy}>
-          {busy ? 'Đang đăng nhập…' : 'Đăng nhập'}
-        </button>
-      </form>
+      <div className="card login-card">
+        <div className="brand-row">
+          <span className="mark">V</span>
+          <div>
+            <h1>Quản lý hợp đồng VATM</h1>
+            <span className="muted">Tổng công ty Quản lý bay Việt Nam</span>
+          </div>
+        </div>
+        <form onSubmit={submit}>
+          <label>
+            Vai trò đăng nhập
+            <select value={index} onChange={(e) => setIndex(Number(e.target.value))}>
+              {PRESETS.map((p, i) => (
+                <option key={p.subject} value={i}>
+                  {p.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          {error && <p className="error">{error}</p>}
+          <button type="submit" disabled={busy}>
+            {busy ? 'Đang đăng nhập…' : 'Đăng nhập'}
+          </button>
+          <span className="field-hint" style={{ textAlign: 'center' }}>
+            Môi trường phát triển · đăng nhập thử nghiệm
+          </span>
+        </form>
+      </div>
     </div>
   );
 }

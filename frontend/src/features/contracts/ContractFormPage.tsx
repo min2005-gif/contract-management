@@ -158,11 +158,12 @@ export function ContractFormPage() {
             {errors.value && <small className="error">{errors.value}</small>}
           </label>
           <label>
-            Người phụ trách (UUID) *
+            Người phụ trách
             <input
               value={form.personInChargeId}
               onChange={(e) => field('personInChargeId', e.target.value)}
             />
+            <span className="field-hint">Mã định danh người phụ trách (tự sinh)</span>
           </label>
           <label>
             Ngày ký *

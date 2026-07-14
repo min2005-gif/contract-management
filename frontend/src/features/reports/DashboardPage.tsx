@@ -11,6 +11,7 @@ import {
 import { errorMessage } from '../../api/client';
 import { downloadReport, getReportSummary } from '../../api/reports';
 import { formatCurrency } from '../../i18n';
+import { ChartIcon, ClockIcon, FileIcon, MoneyIcon } from '../../components/icons';
 
 export function DashboardPage() {
   const { data, isLoading, isError, error } = useQuery({
@@ -41,20 +42,32 @@ export function DashboardPage() {
 
       <div className="tiles">
         <div className="tile card">
+          <span className="tile-icon">
+            <FileIcon size={20} />
+          </span>
           <span className="tile-value">{data.totalContracts}</span>
-          <span className="muted">Tổng số hợp đồng</span>
+          <span className="tile-label">Tổng số hợp đồng</span>
         </div>
-        <div className="tile card">
+        <div className="tile card accent-green">
+          <span className="tile-icon">
+            <MoneyIcon size={20} />
+          </span>
           <span className="tile-value">{formatCurrency(data.totalValue)}</span>
-          <span className="muted">Tổng giá trị</span>
+          <span className="tile-label">Tổng giá trị</span>
         </div>
-        <div className="tile card">
+        <div className="tile card accent-amber">
+          <span className="tile-icon">
+            <ClockIcon size={20} />
+          </span>
           <span className="tile-value">{data.nearingExpiry}</span>
-          <span className="muted">Sắp hết hạn</span>
+          <span className="tile-label">Sắp hết hạn</span>
         </div>
-        <div className="tile card">
+        <div className="tile card accent-teal">
+          <span className="tile-icon">
+            <ChartIcon size={20} />
+          </span>
           <span className="tile-value">{data.inProgress}</span>
-          <span className="muted">Đang thực hiện</span>
+          <span className="tile-label">Đang thực hiện</span>
         </div>
       </div>
 

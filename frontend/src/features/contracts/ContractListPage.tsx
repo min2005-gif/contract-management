@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { listContracts } from '../../api/contracts';
 import { errorMessage } from '../../api/client';
 import { contractStatusLabels, contractTypeLabels, formatCurrency } from '../../i18n';
+import { PlusIcon } from '../../components/icons';
 
 export function ContractListPage() {
   const [search, setSearch] = useState('');
@@ -20,7 +21,7 @@ export function ContractListPage() {
       <div className="page-head">
         <h2>Danh sách hợp đồng</h2>
         <Link className="btn" to="/contracts/new">
-          + Tạo hợp đồng
+          <PlusIcon size={16} /> Tạo hợp đồng
         </Link>
       </div>
 
@@ -56,8 +57,8 @@ export function ContractListPage() {
           <tbody>
             {data.content.length === 0 && (
               <tr>
-                <td colSpan={5} className="muted">
-                  Chưa có hợp đồng nào.
+                <td colSpan={5} className="empty">
+                  Chưa có hợp đồng nào. Nhấn “Tạo hợp đồng” để bắt đầu.
                 </td>
               </tr>
             )}
