@@ -5,9 +5,9 @@
   "framework": "vite",
   "rewrites": [
     {
-      "//": "Proxy API calls to the Render backend. Replace the host after the backend deploys.",
+      "//": "Proxy API calls to the Render backend.",
       "source": "/api/:path*",
-      "destination": "https://contract-backend-REPLACE.onrender.com/api/:path*"
+      "destination": "https://contract-backend-uju4.onrender.com/api/:path*"
     },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
