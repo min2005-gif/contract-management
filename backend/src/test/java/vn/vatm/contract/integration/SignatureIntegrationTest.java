@@ -16,23 +16,35 @@ import vn.vatm.contract.org.Role;
 import vn.vatm.contract.support.AbstractIntegrationTest;
 
 /**
- * T072: digital-signature integration — success records status; failure → 502, no partial state.
+ * T072: digital-signature integration — only an authorized signatory (unit head/admin) may sign;
+ * success records status; failure → 502, no partial state.
  */
 class SignatureIntegrationTest extends AbstractIntegrationTest {
 
   @MockBean private SignatureGateway signatureGateway;
 
   @Test
-  void signingRecordsSignedStatusAndDocument() throws Exception {
+  void authorizedSignatoryCanSign() throws Exception {
     when(signatureGateway.sign(any())).thenReturn("SIGNED-REF-123");
     String id = createContract(asUser("alice", "U01", Role.DATA_ENTRY), "HD-SIGN-001");
 
     mockMvc
         .perform(
             post("/api/v1/integrations/contracts/{id}/sign", id)
-                .with(asUser("alice", "U01", Role.DATA_ENTRY)))
+                .with(asUser("head", "U01", Role.UNIT_HEAD)))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.signed", is(true)));
+  }
+
+  @Test
+  void dataEntryCannotSign() throws Exception {
+    String id = createContract(asUser("alice", "U01", Role.DATA_ENTRY), "HD-SIGN-003");
+
+    mockMvc
+        .perform(
+            post("/api/v1/integrations/contracts/{id}/sign", id)
+                .with(asUser("alice", "U01", Role.DATA_ENTRY)))
+        .andExpect(status().isForbidden());
   }
 
   @Test
@@ -44,7 +56,7 @@ class SignatureIntegrationTest extends AbstractIntegrationTest {
     mockMvc
         .perform(
             post("/api/v1/integrations/contracts/{id}/sign", id)
-                .with(asUser("alice", "U01", Role.DATA_ENTRY)))
+                .with(asUser("head", "U01", Role.UNIT_HEAD)))
         .andExpect(status().isBadGateway())
         .andExpect(jsonPath("$.code", is("INTEGRATION_UNAVAILABLE")));
 

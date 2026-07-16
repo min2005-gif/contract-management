@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import vn.vatm.contract.audit.AuditService;
 import vn.vatm.contract.audit.SecurityEventLogger;
 import vn.vatm.contract.config.AccessControl;
+import vn.vatm.contract.config.ApiExceptions.ForbiddenException;
 import vn.vatm.contract.config.ApiExceptions.IntegrationUnavailableException;
 import vn.vatm.contract.config.ApiExceptions.NotFoundException;
 import vn.vatm.contract.config.CurrentUser;
@@ -20,6 +21,7 @@ import vn.vatm.contract.contract.ContractResponse;
 import vn.vatm.contract.integration.adapters.AccountingGateway;
 import vn.vatm.contract.integration.adapters.EDocumentGateway;
 import vn.vatm.contract.integration.adapters.SignatureGateway;
+import vn.vatm.contract.org.Role;
 
 /**
  * Orchestrates the internal-system integrations for US5: digital signature, e-document linking, and
@@ -62,6 +64,12 @@ public class IntegrationService {
     CurrentUser user = currentUserService.require();
     Contract contract = requireContract(contractId);
     accessControl.requireUnitAccess(user, contract.getOwningUnitId());
+    // Only an authorized signatory may sign (unit head / admin) — remote signing (SmartCA style).
+    if (!user.hasRole(Role.UNIT_HEAD) && !user.hasRole(Role.ADMIN)) {
+      throw new ForbiddenException(
+          "Chỉ người có thẩm quyền (Trưởng đơn vị/TCT) mới được ký số. / Only an authorized"
+              + " signatory may sign.");
+    }
 
     // Call the external service BEFORE mutating: a failure leaves the contract untouched.
     String signedRef;
