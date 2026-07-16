@@ -4,6 +4,7 @@ import { LoginPage } from './auth/LoginPage';
 import { ContractListPage } from './features/contracts/ContractListPage';
 import { ContractFormPage } from './features/contracts/ContractFormPage';
 import { ContractDetailPage } from './features/contracts/ContractDetailPage';
+import { ContractWizardPage } from './features/contracts/ContractWizardPage';
 import { DashboardPage } from './features/reports/DashboardPage';
 import { AlertsPage } from './features/alerts/AlertsPage';
 import { AdminUsersPage } from './features/admin/AdminUsersPage';
@@ -14,7 +15,7 @@ export function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route element={<Layout />}>
         <Route path="/contracts" element={<ContractListPage />} />
-        <Route path="/contracts/new" element={<ContractFormPage />} />
+        <Route path="/contracts/new" element={<ContractWizardPage />} />
         <Route path="/contracts/:id/edit" element={<ContractFormPage />} />
         <Route path="/contracts/:id" element={<ContractDetailPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
