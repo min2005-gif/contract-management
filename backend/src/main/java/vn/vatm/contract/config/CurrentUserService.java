@@ -25,10 +25,13 @@ public class CurrentUserService {
 
   private final UserRepository users;
   private final OrganizationalUnitRepository units;
+  private final AuthProperties authProperties;
 
-  public CurrentUserService(UserRepository users, OrganizationalUnitRepository units) {
+  public CurrentUserService(
+      UserRepository users, OrganizationalUnitRepository units, AuthProperties authProperties) {
     this.users = users;
     this.units = units;
+    this.authProperties = authProperties;
   }
 
   @Transactional
@@ -60,7 +63,7 @@ public class CurrentUserService {
   }
 
   private User provision(Jwt jwt) {
-    String unitCode = jwt.getClaimAsString("unit");
+    String unitCode = jwt.getClaimAsString(authProperties.getUnitClaim());
     if (unitCode == null || unitCode.isBlank()) {
       throw new ForbiddenException(
           "Tài khoản chưa gắn với đơn vị. / Account is not associated with a unit.");
