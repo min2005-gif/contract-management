@@ -4,6 +4,12 @@ import { errorMessage, getStoredToken } from '../../api/client';
 import { attachmentDownloadUrl, listAttachments, uploadAttachment } from '../../api/contracts';
 
 const KINDS = ['MAIN', 'SCAN', 'APPENDIX', 'OTHER'];
+const KIND_LABELS: Record<string, string> = {
+  MAIN: 'Hợp đồng chính',
+  SCAN: 'Bản scan',
+  APPENDIX: 'Phụ lục',
+  OTHER: 'Tài liệu khác',
+};
 
 export function Attachments({ contractId }: { contractId: string }) {
   const queryClient = useQueryClient();
@@ -43,7 +49,7 @@ export function Attachments({ contractId }: { contractId: string }) {
         <select value={kind} onChange={(e) => setKind(e.target.value)}>
           {KINDS.map((k) => (
             <option key={k} value={k}>
-              {k}
+              {KIND_LABELS[k]}
             </option>
           ))}
         </select>
@@ -65,7 +71,7 @@ export function Attachments({ contractId }: { contractId: string }) {
             </button>
             <span className="muted">
               {' '}
-              · {a.kind} · {(a.sizeBytes / 1024).toFixed(1)} KB
+              · {KIND_LABELS[a.kind] ?? a.kind} · {(a.sizeBytes / 1024).toFixed(1)} KB
             </span>
           </li>
         ))}
