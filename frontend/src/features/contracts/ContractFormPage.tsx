@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { errorMessage } from '../../api/client';
 import { createContract, getContract, updateContract } from '../../api/contracts';
+import { listPeople } from '../../api/people';
 import type { ContractInput, ContractType } from '../../api/types';
 import { contractStatusLabels, contractTypeLabels } from '../../i18n';
 import { Attachments } from './Attachments';
@@ -22,7 +23,7 @@ function emptyForm(): ContractInput {
     value: 0,
     signDate: '',
     termEnd: '',
-    personInChargeId: crypto.randomUUID(),
+    personInChargeId: '',
     official: false,
   };
 }
@@ -42,6 +43,9 @@ export function ContractFormPage() {
     queryFn: () => getContract(id as string),
     enabled: isEdit,
   });
+
+  const peopleQuery = useQuery({ queryKey: ['people'], queryFn: listPeople });
+  const people = peopleQuery.data ?? [];
 
   useEffect(() => {
     if (existing.data) {
@@ -78,6 +82,7 @@ export function ContractFormPage() {
     if (!form.partyA.trim()) e.partyA = 'Bắt buộc';
     if (!form.partyB.trim()) e.partyB = 'Bắt buộc';
     if (!(form.value >= 0)) e.value = 'Giá trị phải ≥ 0';
+    if (!form.personInChargeId) e.personInChargeId = 'Bắt buộc';
     if (!form.signDate) e.signDate = 'Bắt buộc';
     if (!form.termEnd) e.termEnd = 'Bắt buộc';
     if (form.signDate && form.termEnd && form.termEnd < form.signDate) {
@@ -158,12 +163,27 @@ export function ContractFormPage() {
             {errors.value && <small className="error">{errors.value}</small>}
           </label>
           <label>
-            Người phụ trách
-            <input
+            Người phụ trách *
+            <select
               value={form.personInChargeId}
               onChange={(e) => field('personInChargeId', e.target.value)}
-            />
-            <span className="field-hint">Mã định danh người phụ trách (tự sinh)</span>
+            >
+              <option value="">— Chọn người phụ trách —</option>
+              {people.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.fullName} ({p.unitCode})
+                </option>
+              ))}
+              {isEdit &&
+                form.personInChargeId &&
+                !people.some((p) => p.id === form.personInChargeId) && (
+                  <option value={form.personInChargeId}>(người phụ trách hiện tại)</option>
+                )}
+            </select>
+            {errors.personInChargeId && (
+              <small className="error">{errors.personInChargeId}</small>
+            )}
+            <span className="field-hint">Chọn người chịu trách nhiệm & nhận cảnh báo</span>
           </label>
           <label>
             Ngày ký *
