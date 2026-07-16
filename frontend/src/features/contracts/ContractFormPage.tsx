@@ -6,10 +6,6 @@ import { createContract, getContract, updateContract } from '../../api/contracts
 import { listPeople } from '../../api/people';
 import type { ContractInput, ContractType } from '../../api/types';
 import { contractStatusLabels, contractTypeLabels } from '../../i18n';
-import { Attachments } from './Attachments';
-import { WorkflowActions } from './WorkflowActions';
-import { StatusTimeline } from './StatusTimeline';
-import { IntegrationActions } from './IntegrationActions';
 
 const TYPES: ContractType[] = ['PURCHASE_SALE', 'SERVICE', 'CONSTRUCTION', 'LEASE', 'LABOR'];
 
@@ -223,10 +219,6 @@ export function ContractFormPage() {
         </div>
       </form>
 
-      {isEdit && existing.data && <WorkflowActions contract={existing.data} />}
-      {isEdit && existing.data && <IntegrationActions contract={existing.data} />}
-      {isEdit && id && <StatusTimeline contractId={id} />}
-      {isEdit && id && <Attachments contractId={id} />}
     </section>
   );
 }

@@ -148,6 +148,44 @@ button.link-btn:hover {
   background: var(--primary-600);
   text-decoration: none;
 }
+.btn.secondary {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+}
+.btn.secondary:hover {
+  background: var(--surface-2);
+  text-decoration: none;
+}
+
+/* Detail info grid */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem 1.5rem;
+  margin: 0;
+}
+.info-grid > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.info-grid dt {
+  font-size: 0.75rem;
+  color: var(--text-3);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.info-grid dd {
+  margin: 0;
+  font-weight: 500;
+}
+@media (max-width: 720px) {
+  .info-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
 
 /* ---------- Inputs ---------- */
 input,
