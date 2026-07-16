@@ -78,4 +78,20 @@ public class User {
   public boolean isActive() {
     return active;
   }
+
+  public void setFullName(String fullName) {
+    this.fullName = fullName;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public void setUnit(OrganizationalUnit unit) {
+    this.unit = unit;
+  }
+
+  public void setActive(boolean active) {
+    this.active = active;
+  }
 }

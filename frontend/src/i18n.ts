@@ -25,6 +25,13 @@ export const paymentStatusLabels: Record<PaymentStatus, string> = {
   PAID: 'Đã thanh toán',
 };
 
+export const roleLabels: Record<string, string> = {
+  DATA_ENTRY: 'Nhân viên nhập liệu',
+  UNIT_HEAD: 'Trưởng đơn vị',
+  MANAGEMENT: 'Lãnh đạo / Quản lý',
+  ADMIN: 'Quản trị hệ thống',
+};
+
 export const alertTypeLabels: Record<string, string> = {
   NEARING_EXPIRY: 'Sắp hết hạn',
   UNSIGNED: 'Chưa ký',

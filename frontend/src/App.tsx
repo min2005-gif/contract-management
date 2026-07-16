@@ -5,6 +5,7 @@ import { ContractListPage } from './features/contracts/ContractListPage';
 import { ContractFormPage } from './features/contracts/ContractFormPage';
 import { DashboardPage } from './features/reports/DashboardPage';
 import { AlertsPage } from './features/alerts/AlertsPage';
+import { AdminUsersPage } from './features/admin/AdminUsersPage';
 
 export function App() {
   return (
@@ -16,6 +17,7 @@ export function App() {
         <Route path="/contracts/:id" element={<ContractFormPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/alerts" element={<AlertsPage />} />
+        <Route path="/admin/users" element={<AdminUsersPage />} />
         <Route path="/" element={<Navigate to="/contracts" replace />} />
       </Route>
       <Route path="*" element={<Navigate to="/contracts" replace />} />

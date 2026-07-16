@@ -25,12 +25,17 @@ public class CurrentUserService {
 
   private final UserRepository users;
   private final OrganizationalUnitRepository units;
+  private final vn.vatm.contract.org.UserRoleRepository userRoles;
   private final AuthProperties authProperties;
 
   public CurrentUserService(
-      UserRepository users, OrganizationalUnitRepository units, AuthProperties authProperties) {
+      UserRepository users,
+      OrganizationalUnitRepository units,
+      vn.vatm.contract.org.UserRoleRepository userRoles,
+      AuthProperties authProperties) {
     this.users = users;
     this.units = units;
+    this.userRoles = userRoles;
     this.authProperties = authProperties;
   }
 
@@ -42,6 +47,8 @@ public class CurrentUserService {
     }
     Set<Role> roles = rolesFromAuthorities(auth);
     User user = users.findByExternalSubject(jwt.getSubject()).orElseGet(() -> provision(jwt));
+    // Merge roles the token carries with roles assigned in-app (admin user management).
+    userRoles.findByUserId(user.getId()).forEach(ur -> roles.add(ur.getRole()));
     OrganizationalUnit unit = user.getUnit();
     return new CurrentUser(user.getId(), unit.getId(), unit.getCode(), unit.getType(), roles);
   }

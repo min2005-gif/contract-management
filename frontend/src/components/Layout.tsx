@@ -1,6 +1,6 @@
 import { Navigate, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
-import { BellIcon, ChartIcon, FileIcon, LogoutIcon } from './icons';
+import { BellIcon, ChartIcon, FileIcon, LogoutIcon, UsersIcon } from './icons';
 import logo from '../assets/logo.png';
 
 const roleLabels: Record<string, string> = {
@@ -22,6 +22,7 @@ export function Layout() {
     profile.unit === 'TCT' ||
     profile.roles.includes('MANAGEMENT') ||
     profile.roles.includes('ADMIN');
+  const isAdmin = profile.roles.includes('ADMIN');
   const initial = (profile.name || '?').charAt(0).toUpperCase();
   const rolesText = profile.roles.map((r) => roleLabels[r] ?? r).join(', ');
 
@@ -42,6 +43,11 @@ export function Layout() {
           {canSeeReports && (
             <NavLink to="/dashboard" className="navlink">
               <ChartIcon /> Báo cáo
+            </NavLink>
+          )}
+          {isAdmin && (
+            <NavLink to="/admin/users" className="navlink">
+              <UsersIcon /> Quản trị
             </NavLink>
           )}
         </nav>

@@ -6,14 +6,26 @@ import { errorMessage } from '../../api/client';
 import { contractStatusLabels, contractTypeLabels, formatCurrency } from '../../i18n';
 import { PlusIcon } from '../../components/icons';
 
+const STATUS_TABS: { key?: string; label: string }[] = [
+  { key: undefined, label: 'Tất cả' },
+  { key: 'DRAFT', label: 'Nháp' },
+  { key: 'PENDING_CHECK', label: 'Chờ kiểm tra' },
+  { key: 'PENDING_TCT_APPROVAL', label: 'Chờ TCT duyệt' },
+  { key: 'ACTIVE', label: 'Hiệu lực' },
+  { key: 'IN_PROGRESS', label: 'Đang thực hiện' },
+  { key: 'COMPLETED', label: 'Hoàn thành' },
+  { key: 'LIQUIDATED', label: 'Đã thanh lý' },
+];
+
 export function ContractListPage() {
   const [search, setSearch] = useState('');
   const [q, setQ] = useState('');
+  const [status, setStatus] = useState<string | undefined>(undefined);
   const navigate = useNavigate();
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['contracts', q],
-    queryFn: () => listContracts({ q: q || undefined, size: 50 }),
+    queryKey: ['contracts', q, status],
+    queryFn: () => listContracts({ q: q || undefined, status, size: 50 }),
   });
 
   return (
@@ -23,6 +35,18 @@ export function ContractListPage() {
         <Link className="btn" to="/contracts/new">
           <PlusIcon size={16} /> Tạo hợp đồng
         </Link>
+      </div>
+
+      <div className="tabs">
+        {STATUS_TABS.map((t) => (
+          <button
+            key={t.label}
+            className={`tab${status === t.key ? ' tab-active' : ''}`}
+            onClick={() => setStatus(t.key)}
+          >
+            {t.label}
+          </button>
+        ))}
       </div>
 
       <form

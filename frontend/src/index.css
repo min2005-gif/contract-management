@@ -339,6 +339,58 @@ input::placeholder {
   flex-wrap: wrap;
   align-items: center;
 }
+
+/* Status tabs */
+.tabs {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.5rem;
+}
+.tab {
+  background: transparent;
+  color: var(--text-2);
+  border: 1px solid transparent;
+  padding: 0.42rem 0.85rem;
+  border-radius: 999px;
+  font-weight: 550;
+  font-size: 0.9rem;
+}
+.tab:hover {
+  background: var(--surface-2);
+  color: var(--text);
+}
+.tab-active {
+  background: var(--primary-50);
+  color: var(--primary-700);
+  border-color: #cfe0fb;
+}
+.tab-active:hover {
+  background: var(--primary-50);
+}
+
+/* Role checkbox group (admin) */
+.role-checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.2rem;
+  margin-top: 0.4rem;
+}
+.role-check {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: 500 !important;
+  color: var(--text) !important;
+  font-size: 0.9rem;
+}
+.role-check input {
+  width: 16px;
+  height: 16px;
+}
 .toolbar input {
   flex: 1;
   min-width: 240px;
