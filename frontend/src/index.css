@@ -223,9 +223,9 @@ input::placeholder {
 .sidebar .logo .logo-img {
   width: 34px;
   height: 34px;
-  border-radius: 8px;
+  border-radius: 50%;
   background: #fff;
-  padding: 3px;
+  padding: 2px;
   flex: none;
   object-fit: contain;
 }
