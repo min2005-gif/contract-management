@@ -371,6 +371,62 @@ input::placeholder {
   background: var(--primary-50);
 }
 
+/* Workflow stepper */
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin: 0.25rem 0 1.1rem;
+  flex-wrap: wrap;
+}
+.step {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--text-3);
+  font-size: 0.85rem;
+  font-weight: 550;
+}
+.step:not(:last-child)::after {
+  content: '';
+  width: 26px;
+  height: 2px;
+  background: var(--border-strong);
+  margin: 0 0.35rem;
+}
+.step-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--surface-3);
+  color: var(--text-3);
+  font-size: 0.78rem;
+  font-weight: 700;
+  border: 1px solid var(--border-strong);
+}
+.step-done .step-dot {
+  background: var(--success-bg);
+  color: var(--success);
+  border-color: transparent;
+}
+.step-done {
+  color: var(--success);
+}
+.step-active .step-dot {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+.step-active {
+  color: var(--primary-700);
+}
+.workflow-status {
+  margin: 0 0 0.35rem;
+  font-size: 0.92rem;
+}
+
 /* Role checkbox group (admin) */
 .role-checks {
   display: flex;
