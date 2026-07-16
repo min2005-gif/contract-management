@@ -1,6 +1,7 @@
 import { Navigate, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import { BellIcon, ChartIcon, FileIcon, LogoutIcon } from './icons';
+import logo from '../assets/logo.png';
 
 const roleLabels: Record<string, string> = {
   DATA_ENTRY: 'Nhập liệu',
@@ -28,7 +29,7 @@ export function Layout() {
     <div className="shell">
       <aside className="sidebar">
         <div className="logo">
-          <span className="mark">V</span>
+          <img className="logo-img" src={logo} alt="VATM" />
           <span>Quản lý hợp đồng</span>
         </div>
         <nav>
