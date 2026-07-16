@@ -44,32 +44,15 @@ export function LoginPage() {
 
   return (
     <div className="login">
-      <aside className="login-brand">
-        <div className="login-brand-inner">
-          <div className="brand-logo">
-            <img src={logo} alt="Logo VATM" />
-          </div>
-          <h1 className="brand-title">VATM</h1>
-          <p className="brand-org">Tổng công ty Quản lý bay Việt Nam</p>
-          <div className="brand-divider" />
-          <h2 className="brand-system">Hệ thống Quản lý Hợp đồng tập trung</h2>
-          <ul className="brand-points">
-            <li>Quản lý hợp đồng thống nhất toàn Tổng công ty</li>
-            <li>Quy trình duyệt và cảnh báo tự động</li>
-            <li>Báo cáo tổng hợp, minh bạch, kịp thời</li>
-          </ul>
+      <div className="login-card">
+        <div className="login-logo">
+          <img src={logo} alt="Logo VATM" />
         </div>
-      </aside>
+        <h1 className="login-title">VATM</h1>
+        <p className="muted login-org">Tổng công ty Quản lý bay Việt Nam</p>
+        <h2 className="login-system">Hệ thống Quản lý Hợp đồng tập trung</h2>
 
-      <main className="login-form-panel">
-        <form className="login-form" onSubmit={submit}>
-          <div className="login-form-logo">
-            <img src={logo} alt="Logo VATM" />
-          </div>
-          <div>
-            <h2>Đăng nhập hệ thống</h2>
-            <p className="muted">Chọn tài khoản để tiếp tục</p>
-          </div>
+        <form onSubmit={submit}>
           <label>
             Vai trò đăng nhập
             <select value={index} onChange={(e) => setIndex(Number(e.target.value))}>
@@ -84,11 +67,12 @@ export function LoginPage() {
           <button type="submit" disabled={busy}>
             {busy ? 'Đang đăng nhập…' : 'Đăng nhập'}
           </button>
-          <span className="field-hint" style={{ textAlign: 'center' }}>
-            Môi trường thử nghiệm · Sẽ thay bằng đăng nhập SSO của VATM khi triển khai
-          </span>
         </form>
-      </main>
+
+        <span className="field-hint login-note">
+          Môi trường thử nghiệm · Sẽ thay bằng đăng nhập SSO của VATM khi triển khai
+        </span>
+      </div>
     </div>
   );
 }
