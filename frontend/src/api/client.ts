@@ -26,6 +26,21 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// On 401 (expired/invalid token), clear the session and return to the login page.
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (axios.isAxiosError(error) && error.response?.status === 401) {
+      setStoredToken(null);
+      localStorage.removeItem('vatm.profile');
+      if (!window.location.pathname.startsWith('/login')) {
+        window.location.href = '/login';
+      }
+    }
+    return Promise.reject(error);
+  },
+);
+
 /** Extracts a human-readable message from an RFC 7807 problem+json error. */
 export function errorMessage(err: unknown): string {
   if (axios.isAxiosError(err)) {
